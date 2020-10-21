@@ -68,6 +68,9 @@ class plotterBase:
         else:
             raise(NameError)
 
+    def save(self, path):
+        self.cvs.SaveAs(path)
+
 
 class kDistributions(plotterBase):
     # 외부에서 histogram을 연결한 후
