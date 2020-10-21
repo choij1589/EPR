@@ -188,7 +188,7 @@ class kDistributions(plotterBase):
                 ratio.GetYaxis().SetLabelSize(0.08)
                 # ratio.GetXaxis().SetLable
 
-    def draw(self, info="#it{L}_{int} = 35.9 fb^{-1}", cmsText="CMS", extraText="Preliminary"):
+    def combine(self, info="#it{L}_{int} = 35.9 fb^{-1}", cmsText="CMS", extraText="Preliminary"):
         # 만든 histogram과 canvas로 최종 캔버스 반환
         super().pad_up().cd()
         for name, hist in self.hists.items():
@@ -208,6 +208,7 @@ class kDistributions(plotterBase):
         super().logo().DrawLatexNDC(0.15, 0.86, cmsText)
         super().extra_logo().DrawLatexNDC(0.15, 0.82, extraText)
 
+    def draw(self):
         super().cvs().Draw()
 
 # TO DO: make templates

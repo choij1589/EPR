@@ -1,6 +1,15 @@
 from plotterBase import plotterBase, kDistributions
 from ROOT import *
 import subprocess
+import argparse
+
+# input for argparse
+parser = argparse.ArgumentParser(description="test")
+parser.add_argument("--hist", required=True, help="histogram name")
+parser.add_argument("--xAxis", required=True, help="x axis name")
+parser.add_argument("--yAxis", required=True, help="y axis name")
+
+args = parser.parse_args()
 
 # get data
 pwd = subprocess.check_output("echo $PWD", shell=True, encoding="utf-8")
@@ -18,9 +27,12 @@ for name in file_names:
     files[name] = TFile(this_path)
 
 hists = {}
-hist_name = "ZMass_ee"
-x_axis = "M(ee)"
-y_axis = "A.U."
+hist_name = str(args.hist)
+x_axis = str(args.xAxis)
+y_axis = str(args.yAxis)
+#hist_name = "ZMass_ee"
+#x_axis = "M(ee)"
+#y_axis = "A.U."
 
 for file_name in file_names:
     if file_name == "DYtest":
@@ -41,7 +53,7 @@ for file_name in file_names:
 kDist = kDistributions()
 kDist.get_hists(hists=hists, scale="normalize", rebin=10)
 kDist.generate_ratio(base_name="DYtest")
-kDist.deco_hists(y_title="A.U")
-kDist.deco_ratio(x_title="M(ee) [GeV]", y_title="x/DYtest")
-kDist.draw(info="Normed to unit")
-kDist.save("./PlotterResult/drellyan/" + hist_name + ".png")
+kDist.deco_hists(y_title=y_axis)
+kDist.deco_ratio(x_title=x_axis, y_title="x/DYtest")
+kDist.combine(info="Normed to unit")
+kDist.save(pwd + "/../PlotterResult/drellyan/" + hist_name + ".png")
