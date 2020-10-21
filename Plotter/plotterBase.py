@@ -63,7 +63,7 @@ class plotterBase:
             self.pad_down.SetGrid(1)
             self.pad_down.SetTopMargin(0.08)
             self.pad_down.SetBottomMargin(0.3)
-            self.legend = TLegend(0.69, 0.70, 0.90, 0.925)
+            self.legend = TLegend(0.69, 0.70, 0.90, 0.90)
 
         else:
             raise(NameError)
@@ -81,7 +81,7 @@ class kDistributions(plotterBase):
         self.hists = {}
         self.ratio_hists = {}
 
-    def get_hists(self, hists={}, scale="none", rebin=-1):
+    def get_hists(self, hists={}, scale="none", rebin=-1, x_axis_range=[0., -1.], y_axis_range=[0., -1.]):
         for name, hist in hists.items():
             h = hist.Clone("temp_" + name)
             self.hists[name] = h
@@ -102,27 +102,43 @@ class kDistributions(plotterBase):
                 pass
             else:
                 hist.Rebin(rebin)
+        
+        y_range_max = self.automatic_y_range()
+        for name, hist in self.hists.items():
+            if x_axis_range[1] == -1.:
+                pass
+            else:
+                hist.GetXaxis().SetRangeUser(x_axis_range[0], x_axis_range[1])
 
+            if y_axis_range[1] == -1.:
+                if self.logy:
+                    hist.GetYaxis().SetRangeUser(1, y_range_max*10)
+                else:
+                    hist.GetYaxis().SetRangeUser(0, y_range_max*1.4)
+            else:
+                hist.GetYaxis().SetRangeUser(y_axis_range[0], y_axis_range[1])
+
+    def automatic_y_range(self):
+        out = -1.
+        for name, hist in self.hists.items():
+            this_max = hist.GetMaximum()
+            if out < this_max:
+                out = this_max
+        return out
+        
     def generate_ratio(self, base_name):
         for name, hist in self.hists.items():
             ratio = hist.Clone("ratio_" + name)
             ratio.Divide(self.hists[base_name])
             self.ratio_hists[name] = ratio
 
-    def deco_hists(self, deco_type="central", scale_factor=1.,
-                   x_axis=[0., -1.], y_axis=[0., -1.], y_title=""):
+    def deco_hists(self, deco_type="central", scale_factor=1., y_title=""):
         # deco type: syst, central
         if deco_type == "central":
             color = 2
 
-            # get y_range
-            y_range = -1
             for name, hist in self.hists.items():
                 hist.SetStats(0)
-
-                this_y_range = hist.GetMaximum()
-                if y_range < this_y_range:
-                    y_range = this_y_range
 
             # decorate
             for name, hist in self.hists.items():
@@ -130,29 +146,16 @@ class kDistributions(plotterBase):
                 color += 1
 
                 # x axis
-                # range
-                if x_axis[1] == -1.:
-                    pass
-                else:
-                    hist.GetXaxis().SetRangeUser(x_axis[0], x_axis[1])
                 hist.GetXaxis().SetLabelSize(0)
 
                 # y axis
-                if y_axis[1] == -1.:
-                    if self.logy:
-                        hist.GetYaxis().SetRangeUser(1, y_range*10)
-                    else:
-                        hist.GetYaxis().SetRangeUser(0, y_range*1.3)
-                else:
-                    hist.GetXaxis().SetRangeUser(y_axis[0, y_axis[1]])
-
                 hist.GetYaxis().SetTitle(y_title)
                 hist.GetYaxis().SetTitleSize(0.05)
                 hist.GetYaxis().SetTitleOffset(0.8)
                 hist.GetYaxis().SetTitleSize(0.05)
                 hist.GetYaxis().SetLabelSize(0.03)
 
-                self.legend.AddEntry(hist, name, "lep")
+                super().legend().AddEntry(hist, name, "lep")
 
     def deco_ratio(self, deco_type="central", error_range="medium", x_title="", y_title=""):
         if deco_type == "central":
@@ -193,6 +196,10 @@ class kDistributions(plotterBase):
         super().pad_up().cd()
         for name, hist in self.hists.items():
             hist.Draw("same")
+        super().legend().Draw()
+        super().info().DrawLatexNDC(0.68, 0.92, info)
+        super().logo().DrawLatexNDC(0.15, 0.83, cmsText)
+        super().extra_logo().DrawLatexNDC(0.15, 0.78, extraText)
 
         super().pad_down().cd()
         for name, hist in self.ratio_hists.items():
@@ -201,13 +208,6 @@ class kDistributions(plotterBase):
         super().cvs().cd()
         super().pad_up().Draw()
         super().pad_down().Draw()
-        super().legend().Draw()
-
-        # TO DO: latex make latex position as input
-        super().info().DrawLatexNDC(0.68, 0.93, info)
-        super().logo().DrawLatexNDC(0.15, 0.86, cmsText)
-        super().extra_logo().DrawLatexNDC(0.15, 0.82, extraText)
-        super().cvs().Draw()
 
     def draw(self):
         super().cvs().Draw()
