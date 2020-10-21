@@ -207,6 +207,7 @@ class kDistributions(plotterBase):
         super().info().DrawLatexNDC(0.68, 0.93, info)
         super().logo().DrawLatexNDC(0.15, 0.86, cmsText)
         super().extra_logo().DrawLatexNDC(0.15, 0.82, extraText)
+        super().cvs().Draw()
 
     def draw(self):
         super().cvs().Draw()

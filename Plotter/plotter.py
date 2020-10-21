@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(description="test")
 parser.add_argument("--hist", required=True, help="histogram name")
 parser.add_argument("--xAxis", required=True, help="x axis name")
 parser.add_argument("--yAxis", required=True, help="y axis name")
-parser.add_argument("--rebin", default=-1, help="rebin factor")
+parser.add_argument("--rebin", default=-1, type=int, help="rebin factor")
 
 args = parser.parse_args()
 
@@ -31,7 +31,7 @@ hists = {}
 hist_name = str(args.hist)
 x_axis = str(args.xAxis)
 y_axis = str(args.yAxis)
-rebin = int(args.rebin)
+rebin_factor = int(args.rebin)
 #hist_name = "ZMass_ee"
 #x_axis = "M(ee)"
 #y_axis = "A.U."
@@ -53,7 +53,7 @@ for file_name in file_names:
         raise(NameError)
 
 kDist = kDistributions()
-kDist.get_hists(hists=hists, scale="normalize", rebin=rebin)
+kDist.get_hists(hists=hists, scale="normalize", rebin=rebin_factor)
 kDist.generate_ratio(base_name="DYtest")
 kDist.deco_hists(y_title=y_axis)
 kDist.deco_ratio(x_title=x_axis, y_title="x/DYtest")
