@@ -40,22 +40,31 @@ rebin = int(args.rebin)
 #hist_name = "ZMass_ee"
 #x_axis = "M(ee)"
 #y_axis = "A.U."
-
+options = ["", "_prefsr"]
 for file_name in file_names:
-    if file_name == "DYtest":
-        hist_path = "DYm50/" + hist_name
-        hist = files[file_name].Get(hist_path)
-        hists[file_name] = hist
-    elif file_name == "DY_inclusive_0j_nlo":
-        hist_path = file_name + "/" + hist_name
-        hist = files[file_name].Get(hist_path)
-        hists[file_name] = hist
-    elif file_name == "DY_inclusive_012j_nlo":
-        hist_path = file_name + "/" + hist_name
-        hist = files[file_name].Get(hist_path)
-        hists[file_name] = hist
-    else:
-        raise(NameError)
+    for option in options:
+        if file_name == "DYtest":
+            hist_path = "DYm50/" + hist_name
+            hist_ee = files[file_name].Get(hist_path + option + "_ee")
+            hist_mm = files[file_name].Get(hist_path + option + "_mm")
+            hist = hist_ee.Clone(file_name + option + "_clone")
+            hist.Add(hist_mm)
+            hists[file_name + option] = hist
+        elif file_name == "DY_inclusive_0j_nlo":
+            hist_path = file_name + "/" + hist_name
+            hist_ee = files[file_name].Get(hist_path + option + "_ee")
+            hist_mm = files[file_name].Get(hist_path + option + "_mm")
+            hist = hist_ee.Clone(file_name + option + "_clone")
+            hist.Add(hist_mm)
+            hists[file_name + option] = hist
+        elif file_name == "DY_inclusive_012j_nlo":
+            hist_path = file_name + "/" + hist_name
+            hist_ee = files[file_name].Get(hist_path + option +  "_ee")
+            hist_mm = files[file_name].Get(hist_path + option +  "_mm")
+            hist = hist_ee.Clone(file_name + option + "_clone")
+            hists[file_name + option] = hist
+        else:
+            raise(NameError)
 
 kDist = kDistributions()
 kDist.get_hists(hists=hists, scale="normalize", rebin=rebin, x_axis_range=x_axis_range, y_axis_range=y_axis_range)

@@ -1,23 +1,19 @@
 #!/bin/sh
 
-python plotter.py --hist ZMass_ee --xAxis "MassZ(ee) [GeV]" --yAxis "A.U." --rebin 10
-python plotter.py --hist ZMass_mm --xAxis "MassZ(#mu#mu) [GeV]" --yAxis "A.U." --rebin 10
-python plotter.py --hist yZ_ee --xAxis "y^{Z_{ee}}" --yAxis "A.U."
-python plotter.py --hist yZ_mm --xAxis "y^{Z_{#mu#Mu}}" --yAxis "A.U."
-python plotter.py --hist ptZ_ee --xAxis "p_{T} (Z_{ee})" --yAxis "A.U." --xRange 0. 200.
-python plotter.py --hist ptZ_mm --xAxis "p_{T} (Z_{#mu#mu})" --yAxis "A.U." --xRange 0. 200.
-python plotter.py --hist phiZ_ee --xAxis "#phi(Z_{ee})" --yAxis "A.U."
-python plotter.py --hist phiZ_mm --xAxis "#phi(Z_{#mu#mu})" --yAxis "A.U."
+python plotter.py --hist ZMass --xAxis "ZMass" --yAxis "A.U." --rebin 10
+python plotter.py --hist yZ --xAxis "y^{Z}" --yAxis "A.U."
+python plotter.py --hist ptZ --xAxis "p_{T} (Z)" --yAxis "A.U." --xRange 0. 200.
+python plotter.py --hist phiZ --xAxis "#phi(Z)" --yAxis "A.U."
 
-python plotter.py --hist ptl1_ee --xAxis "p_{T}(l1_{ee})" --yAxis "A.U." --xRange 0. 200.
-python plotter.py --hist ptl1_mm --xAxis "p_{T}(l1_{mm})" --yAxis "A.U." --xRange 0. 200.
-python plotter.py --hist ptl2_ee --xAxis "p_{T}(l2_{ee})" --yAxis "A.U." --xRange 0. 200.
-python plotter.py --hist ptl2_mm --xAxis "p_{T}(l2_{mm})" --yAxis "A.U." --xRange 0. 200.
-python plotter.py --hist etal1_ee --xAxis "#eta(l1_{ee})" --yAxis "A.U."
-python plotter.py --hist etal1_mm --xAxis "#eta(l1_{mm})" --yAxis "A.U."
-python plotter.py --hist etal2_ee --xAxis "#eta(l2_{ee})" --yAxis "A.U."
-python plotter.py --hist etal2_mm --xAxis "#eta(l2_{mm})" --yAxis "A.U."
-python plotter.py --hist phil1_ee --xAxis "#phi(l1_{ee})" --yAxis "A.U."
-python plotter.py --hist phil1_mm --xAxis "#phi(l1_{mm})" --yAxis "A.U."
-python plotter.py --hist phil2_ee --xAxis "#phi(l2_{ee})" --yAxis "A.U."
-python plotter.py --hist phil2_mm --xAxis "#phi(l2_{mm})" --yAxis "A.U."
+python plotter.py --hist ptl1 --xAxis "p_{T}(l1)" --yAxis "A.U." --xRange 0. 200.
+python plotter.py --hist ptl2 --xAxis "p_{T}(l2)" --yAxis "A.U." --xRange 0. 200.
+python plotter.py --hist etal1 --xAxis "#eta(l1)" --yAxis "A.U."
+python plotter.py --hist etal2 --xAxis "#eta(l2)" --yAxis "A.U."
+python plotter.py --hist phil1 --xAxis "#phi(l1)" --yAxis "A.U."
+python plotter.py --hist phil2 --xAxis "#phi(l2)" --yAxis "A.U."
+python plotter.py --hist phil2 --xAxis "#phi(l2)" --yAxis "A.U."
+
+#python plotter.py --hist ZMass_prefsr --xAxis "mZ_prefsr" --yAxis "A.U." --rebin 10
+#python plotter.py --hist yZ_prefsr --xAxis "yZ_prefsr" --yAxis "A.U."
+#python plotter.py --hist ptZ_prefsr --xAxis "ptZ_prefsr" --yAxis "A.U." --xRange 0. 200.
+#python plotter.py --hist phiZ_prefsr --xAxis "phiZ_prefsr" --yAxis "A.U."
