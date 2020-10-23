@@ -12,6 +12,7 @@ parser.add_argument("--yAxis", required=True, help="y axis name")
 parser.add_argument("--yRange", nargs=2, type=float, default=[0., -1.], help="y axis range")
 parser.add_argument("--rebin", default=-1, type=int, help="rebin factor")
 parser.add_argument("--output", default=".", type=str, help="output path")
+parser.add_argument("--combine", default=False, type=bool, help="combine ee and mm channel")
 args = parser.parse_args()
 
 # get data
@@ -19,7 +20,7 @@ pwd = subprocess.check_output("echo $PWD", shell=True, encoding="utf-8")
 pwd = pwd.rstrip("\n")
 
 path_selOutput = pwd + "/../SelectorOutput/DrellYan/"
-file_names = ["DYtest",
+file_names = ["DYm50",
               "DY_inclusive_0j_nlo",
               "DY_inclusive_012j_nlo"]
 
@@ -37,41 +38,53 @@ y_axis = str(args.yAxis)
 y_axis_range = args.yRange
 rebin = int(args.rebin)
 output_path = str(args.output)
+combine = args.combine
 
 #hist_name = "ZMass_ee"
 #x_axis = "M(ee)"
 #y_axis = "A.U."
 options = ["", "_prefsr"]
 for file_name in file_names:
-    for option in options:
-        if file_name == "DYtest":
-            hist_path = "DYm50/" + hist_name
-            hist_ee = files[file_name].Get(hist_path + option + "_ee")
-            hist_mm = files[file_name].Get(hist_path + option + "_mm")
-            hist = hist_ee.Clone(file_name + option + "_clone")
-            hist.Add(hist_mm)
-            hists[file_name + option] = hist
-        elif file_name == "DY_inclusive_0j_nlo":
-            hist_path = file_name + "/" + hist_name
-            hist_ee = files[file_name].Get(hist_path + option + "_ee")
-            hist_mm = files[file_name].Get(hist_path + option + "_mm")
-            hist = hist_ee.Clone(file_name + option + "_clone")
-            hist.Add(hist_mm)
-            hists[file_name + option] = hist
-        elif file_name == "DY_inclusive_012j_nlo":
-            hist_path = file_name + "/" + hist_name
-            hist_ee = files[file_name].Get(hist_path + option +  "_ee")
-            hist_mm = files[file_name].Get(hist_path + option +  "_mm")
-            hist = hist_ee.Clone(file_name + option + "_clone")
-            hists[file_name + option] = hist
-        else:
-            raise(NameError)
+	for option in options:
+		if combine:
+			hist_path = file_name + "/" +  hist_name
+			hist_ee = files[file_name].Get(hist_path + option + "_ee")
+			hist_mm = files[file_name].Get(hist_path + option + "_mm")
+			hist = hist_ee.Clone(file_name + option + "_clone")
+			hist.Add(hist_mm)
+			hists[file_name + option] = hist
+		else:
+			print("without combine option is not set yet")
+			raise(TypeError)
+
+        #if file_name == "DYtest":
+        #    hist_path = "DYm50/" + hist_name
+        #    hist_ee = files[file_name].Get(hist_path + option + "_ee")
+        #    hist_mm = files[file_name].Get(hist_path + option + "_mm")
+        #    hist = hist_ee.Clone(file_name + option + "_clone")
+        #    hist.Add(hist_mm)
+        #    hists[file_name + option] = hist
+        #elif file_name == "DY_inclusive_0j_nlo":
+        #    hist_path = file_name + "/" + hist_name
+        #    hist_ee = files[file_name].Get(hist_path + option + "_ee")
+        #    hist_mm = files[file_name].Get(hist_path + option + "_mm")
+        #    hist = hist_ee.Clone(file_name + option + "_clone")
+        #    hist.Add(hist_mm)
+        #    hists[file_name + option] = hist
+        #elif file_name == "DY_inclusive_012j_nlo":
+        #    hist_path = file_name + "/" + hist_name
+        #    hist_ee = files[file_name].Get(hist_path + option +  "_ee")
+        #    hist_mm = files[file_name].Get(hist_path + option +  "_mm")
+        #    hist = hist_ee.Clone(file_name + option + "_clone")
+        #    hists[file_name + option] = hist
+        #else:
+        #    raise(NameError)
 
 kDist = kDistributions()
 kDist.get_hists(hists=hists, scale="normalize", rebin=rebin, x_axis_range=x_axis_range, y_axis_range=y_axis_range)
-kDist.generate_ratio(base_name="DYtest")
+kDist.generate_ratio(base_name="DYm50")
 kDist.deco_hists(y_title=y_axis)
-kDist.deco_ratio(x_title=x_axis, y_title="x/DYtest")
+kDist.deco_ratio(x_title=x_axis, y_title="x/DYm50")
 kDist.combine(info="Normed to unit")
 #kDist.save(pwd + "/../PlotterResult/drellyan/" + hist_name + ".png")
-kDist.save(output_path + "/" + hist_name + ".pdf")
+kDist.save(output_path + "/" + hist_name + ".png")

@@ -29,9 +29,7 @@ class plotterBase:
 
     # methods
     def make_canvas(self, cvs_type="default", logy=False):
-        # cvs_type에 따라 canvas 형태 결정
         # default, ratio, ROC...?
-        # TPad 에 대한 세팅은 canvas에 통합
         self.info = TLatex()
         self.logo = TLatex()
         self.extra_logo = TLatex()
@@ -73,8 +71,6 @@ class plotterBase:
 
 
 class kDistributions(plotterBase):
-    # 외부에서 histogram을 연결한 후
-    # histogram들은 decoration type마다 새로 복사해서 꾸미는걸 원칙으로
     def __init__(self, logy=False):
         super().__init__("ratio", logy)
         self.logy = logy
@@ -192,7 +188,6 @@ class kDistributions(plotterBase):
                 # ratio.GetXaxis().SetLable
 
     def combine(self, info="#it{L}_{int} = 35.9 fb^{-1}", cmsText="CMS", extraText="Preliminary"):
-        # 만든 histogram과 canvas로 최종 캔버스 반환
         super().pad_up().cd()
         for name, hist in self.hists.items():
             hist.Draw("same")
