@@ -11,7 +11,7 @@ parser.add_argument("--xRange", nargs=2, type=float, default=[0., -1.], help="x 
 parser.add_argument("--yAxis", required=True, help="y axis name")
 parser.add_argument("--yRange", nargs=2, type=float, default=[0., -1.], help="y axis range")
 parser.add_argument("--rebin", default=-1, type=int, help="rebin factor")
-
+parser.add_argument("--output", default=".", type=str, help="output path")
 args = parser.parse_args()
 
 # get data
@@ -36,6 +36,7 @@ x_axis_range = args.xRange
 y_axis = str(args.yAxis)
 y_axis_range = args.yRange
 rebin = int(args.rebin)
+output_path = str(args.output)
 
 #hist_name = "ZMass_ee"
 #x_axis = "M(ee)"
@@ -72,4 +73,5 @@ kDist.generate_ratio(base_name="DYtest")
 kDist.deco_hists(y_title=y_axis)
 kDist.deco_ratio(x_title=x_axis, y_title="x/DYtest")
 kDist.combine(info="Normed to unit")
-kDist.save(pwd + "/../PlotterResult/drellyan/" + hist_name + ".png")
+#kDist.save(pwd + "/../PlotterResult/drellyan/" + hist_name + ".png")
+kDist.save(output_path + "/" + hist_name + ".pdf")
