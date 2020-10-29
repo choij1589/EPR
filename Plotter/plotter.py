@@ -20,7 +20,7 @@ pwd = subprocess.check_output("echo $PWD", shell=True, encoding="utf-8")
 pwd = pwd.rstrip("\n")
 
 path_selOutput = pwd + "/../SelectorOutput/DrellYan/"
-file_names = ["DYm50",
+file_names = ["DYm50_MiniToNano",
               "DY_inclusive_0j_nlo",
               "DY_inclusive_012j_nlo"]
 
@@ -80,9 +80,9 @@ for file_name in file_names:
         #else:
         #    raise(NameError)
 
-kDist = kDistributions()
+kDist = kDistributions(leg_size="large")
 kDist.get_hists(hists=hists, scale="normalize", rebin=rebin, x_axis_range=x_axis_range, y_axis_range=y_axis_range)
-kDist.generate_ratio(base_name="DYm50")
+kDist.generate_ratio(base_name="DYm50_MiniToNano")
 kDist.deco_hists(y_title=y_axis)
 kDist.deco_ratio(x_title=x_axis, y_title="x/DYm50")
 kDist.combine(info="Normed to unit")

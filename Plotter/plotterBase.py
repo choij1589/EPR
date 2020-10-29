@@ -1,9 +1,9 @@
-from ROOT import TCanvas, TLegend, TPad, TLatex, TRatioPlot
+from ROOT import TCanvas, TLegend, TPad, TLatex
 
 
 class plotterBase:
-    def __init__(self, cvs_type, logy):
-        self.make_canvas(cvs_type, logy)
+    def __init__(self, cvs_type, leg_size,  logy):
+        self.make_canvas(cvs_type, leg_size, logy)
 
     # getter
     def cvs(self):
@@ -28,7 +28,7 @@ class plotterBase:
         return self.extra_logo
 
     # methods
-    def make_canvas(self, cvs_type="default", logy=False):
+    def make_canvas(self, cvs_type="default", leg_size="medium", logy=False):
         # default, ratio, ROC...?
         self.info = TLatex()
         self.logo = TLatex()
@@ -61,7 +61,17 @@ class plotterBase:
             self.pad_down.SetGrid(1)
             self.pad_down.SetTopMargin(0.08)
             self.pad_down.SetBottomMargin(0.3)
-            self.legend = TLegend(0.69, 0.70, 0.90, 0.90)
+            
+			# leg size
+            if leg_size == "small":
+                self.legend = TLegend(0.69, 0.70, 0.90, 0.90)
+            elif leg_size == "medium":
+                self.legend = TLegend(0.69, 0.60, 0.90, 0.90)
+            elif leg_size == "large":
+                self.legend = TLegend(0.50, 0.60, 0.90, 0.90)
+            else:
+                print("wrong legend size...modify leg_size")
+                raise(RuntimeError)
 
         else:
             raise(NameError)
@@ -71,8 +81,8 @@ class plotterBase:
 
 
 class kDistributions(plotterBase):
-    def __init__(self, logy=False):
-        super().__init__("ratio", logy)
+    def __init__(self, leg_size="medium", logy=False):
+        super().__init__("ratio", leg_size, logy)
         self.logy = logy
         self.hists = {}
         self.ratio_hists = {}
