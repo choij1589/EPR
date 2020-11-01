@@ -149,7 +149,7 @@ class kDistributions(plotterBase):
             # decorate
             for name, hist in self.hists.items():
                 hist.SetLineColor(color)
-                hist.SetLineWidth(3)
+                hist.SetLineWidth(2)
                 color += 1
 
                 # x axis
@@ -203,7 +203,7 @@ class kDistributions(plotterBase):
         for name, hist in self.hists.items():
             hist.Draw("same")
         super().legend().Draw()
-        super().info().DrawLatexNDC(0.70, 0.92, info)
+        super().info().DrawLatexNDC(0.72, 0.91, info)
         super().logo().DrawLatexNDC(0.15, 0.83, cmsText)
         super().extra_logo().DrawLatexNDC(0.15, 0.78, extraText)
 
