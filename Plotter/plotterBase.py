@@ -120,7 +120,7 @@ class kDistributions(plotterBase):
                 if self.logy:
                     hist.GetYaxis().SetRangeUser(1, y_range_max*10)
                 else:
-                    hist.GetYaxis().SetRangeUser(0, y_range_max*1.4)
+                    hist.GetYaxis().SetRangeUser(0, y_range_max*1.2)
             else:
                 hist.GetYaxis().SetRangeUser(y_axis_range[0], y_axis_range[1])
 

@@ -21,8 +21,8 @@ pwd = pwd.rstrip("\n")
 
 path_selOutput = pwd + "/../SelectorOutput/DrellYan/"
 file_names = ["DYm50_MiniToNano",
-              "DY_inclusive_0j_nlo",
-              "DY_inclusive_012j_nlo"]
+              "DY_incl_0j_nlo",
+              "DY_incl_012j_nlo"]
 
 # TFiles and hists
 files = {}
@@ -43,48 +43,32 @@ combine = args.combine
 #hist_name = "ZMass_ee"
 #x_axis = "M(ee)"
 #y_axis = "A.U."
-options = ["", "_prefsr"]
+options = [""]
 for file_name in file_names:
-	for option in options:
-		if combine:
-			hist_path = file_name + "/" +  hist_name
-			hist_ee = files[file_name].Get(hist_path + option + "_ee")
-			hist_mm = files[file_name].Get(hist_path + option + "_mm")
-			hist = hist_ee.Clone(file_name + option + "_clone")
-			hist.Add(hist_mm)
-			hists[file_name + option] = hist
-		else:
-			print("without combine option is not set yet")
-			raise(TypeError)
+    for option in options:
+        if file_name == "DY_incl_012j_nlo":
+            dir_name = "DY_inclusive_012j_nlo"
+        elif file_name == "DY_incl_0j_nlo":
+            dir_name = "DY_inclusive_0j_nlo"
+        else:
+            dir_name = file_name
+            
+        if combine:
+            hist_path = dir_name + "/" +  hist_name
+            hist_ee = files[file_name].Get(hist_path + option + "_ee")
+            hist_mm = files[file_name].Get(hist_path + option + "_mm")
+            hist = hist_ee.Clone(file_name + option + "_clone")
+            hist.Add(hist_mm)
+            hists[file_name + option] = hist
+        else:
+            print("without combine option is not set yet")
+            raise(TypeError)
 
-        #if file_name == "DYtest":
-        #    hist_path = "DYm50/" + hist_name
-        #    hist_ee = files[file_name].Get(hist_path + option + "_ee")
-        #    hist_mm = files[file_name].Get(hist_path + option + "_mm")
-        #    hist = hist_ee.Clone(file_name + option + "_clone")
-        #    hist.Add(hist_mm)
-        #    hists[file_name + option] = hist
-        #elif file_name == "DY_inclusive_0j_nlo":
-        #    hist_path = file_name + "/" + hist_name
-        #    hist_ee = files[file_name].Get(hist_path + option + "_ee")
-        #    hist_mm = files[file_name].Get(hist_path + option + "_mm")
-        #    hist = hist_ee.Clone(file_name + option + "_clone")
-        #    hist.Add(hist_mm)
-        #    hists[file_name + option] = hist
-        #elif file_name == "DY_inclusive_012j_nlo":
-        #    hist_path = file_name + "/" + hist_name
-        #    hist_ee = files[file_name].Get(hist_path + option +  "_ee")
-        #    hist_mm = files[file_name].Get(hist_path + option +  "_mm")
-        #    hist = hist_ee.Clone(file_name + option + "_clone")
-        #    hists[file_name + option] = hist
-        #else:
-        #    raise(NameError)
-
-kDist = kDistributions(leg_size="large")
+kDist = kDistributions(leg_size="medium")
 kDist.get_hists(hists=hists, scale="normalize", rebin=rebin, x_axis_range=x_axis_range, y_axis_range=y_axis_range)
 kDist.generate_ratio(base_name="DYm50_MiniToNano")
 kDist.deco_hists(y_title=y_axis)
 kDist.deco_ratio(x_title=x_axis, y_title="x/DYm50")
 kDist.combine(info="Normed to unit")
 #kDist.save(pwd + "/../PlotterResult/drellyan/" + hist_name + ".png")
-kDist.save(output_path + "/" + hist_name + ".pdf")
+kDist.save(output_path + "/" + hist_name + "_dressedlep.pdf")
