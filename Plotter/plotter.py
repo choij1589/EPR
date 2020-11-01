@@ -45,7 +45,7 @@ combine = args.combine
 #hist_name = "ZMass_ee"
 #x_axis = "M(ee)"
 #y_axis = "A.U."
-options = ["_barelep"]
+options = ["", "_barelep"]
 for file_name in file_names:
     for option in options:
         if file_name == "DY_incl_012j_nlo":
@@ -68,9 +68,9 @@ for file_name in file_names:
 
 kDist = kDistributions(leg_size="medium")
 kDist.get_hists(hists=hists, scale="normalize", rebin=rebin, x_axis_range=x_axis_range, y_axis_range=y_axis_range)
-kDist.generate_ratio(base_name="DYm50_MiniToNano_barelep")
+kDist.generate_ratio(base_name="DYm50_MiniToNano")
 kDist.deco_hists(y_title=y_axis)
 kDist.deco_ratio(x_title=x_axis, error_range=error_range, y_title="x/DYm50")
 kDist.combine(info="Normed to unit")
 #kDist.save(pwd + "/../PlotterResult/drellyan/" + hist_name + ".png")
-kDist.save(output_path + "/" + hist_name + "_barelep.pdf")
+kDist.save(output_path + "/" + hist_name + "_bare_and_dressedlep.pdf")
