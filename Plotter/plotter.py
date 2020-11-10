@@ -21,9 +21,9 @@ pwd = subprocess.check_output("echo $PWD", shell=True, encoding="utf-8")
 pwd = pwd.rstrip("\n")
 
 path_selOutput = pwd + "/../SelectorOutput/DrellYan/"
-file_names = ["DYm50_MiniToNano",
-              "DY_incl_0j_nlo",
-              "DY_incl_012j_nlo"]
+file_names = ["DYm50_cp5_MiniToNano",
+              "DYm50_cp5_GridToNano",
+              "DYm50_incl_012j_ewparams_cp5"]
 
 # TFiles and hists
 files = {}
@@ -45,7 +45,7 @@ combine = args.combine
 #hist_name = "ZMass_ee"
 #x_axis = "M(ee)"
 #y_axis = "A.U."
-options = ["_lhe", "_born"]
+options = [""]
 for file_name in file_names:
     for option in options:
         if file_name == "DY_incl_012j_nlo":
@@ -68,9 +68,9 @@ for file_name in file_names:
 
 kDist = kDistributions(leg_size="medium")
 kDist.get_hists(hists=hists, scale="normalize", rebin=rebin, x_axis_range=x_axis_range, y_axis_range=y_axis_range)
-kDist.generate_ratio(base_name="DYm50_MiniToNano_lhe")
+kDist.generate_ratio(base_name="DYm50_cp5_MiniToNano")
 kDist.deco_hists(y_title=y_axis)
-kDist.deco_ratio(x_title=x_axis, error_range=error_range, y_title="x/DYm50")
+kDist.deco_ratio(x_title=x_axis, error_range=error_range, y_title="x/DYm50_cp5_MiniToNano")
 kDist.combine(info="Normed to unit")
 #kDist.save(pwd + "/../PlotterResult/drellyan/" + hist_name + ".png")
-kDist.save(output_path + "/lhe_born/" + hist_name + "_lhe_born.pdf")
+kDist.save(output_path + "/cp5/Dressed/" + hist_name + "_dressed.pdf")
