@@ -2,10 +2,23 @@ from ROOT import TCanvas, TLegend, TPad, TLatex
 
 
 class plotterBase:
-    def __init__(self, cvs_type, leg_size,  logy):
-        self.make_canvas(cvs_type, leg_size, logy)
+    def __init__(self, cvs_type="default", leg_size="medium", logy=False, grid=False):
+        # store information
+        self.cvs_type = cvs_type
+        self.leg_size = leg_size
+        self.logy = logy
+        self.grid = grid
+
+        # set info and logo
+        self.__set_info()
+        self.__set_logo()
+
+        # set canvas and legend
+        self.__set_canvas(cvs_type, logy, grid)
+        self.__set_legend(leg_size)
 
     # getter
+    # this will be
     def cvs(self):
         return self.cvs
 
@@ -27,33 +40,33 @@ class plotterBase:
     def extra_logo(self):
         return self.extra_logo
 
-    # methods
-    def make_canvas(self, cvs_type="default", leg_size="medium", logy=False):
-        # default, ratio, ROC...?
+    # private methods
+    def __set_info(self):
         self.info = TLatex()
-        self.logo = TLatex()
-        self.extra_logo = TLatex()
-
-        # set information
         self.info.SetTextSize(0.035)
         self.info.SetTextFont(42)
+
+    def __set_logo(self):
+        self.logo = TLatex()
+        self.extra_logo = TLatex()
         self.logo.SetTextSize(0.04)
         self.logo.SetTextFont(61)
         self.extra_logo.SetTextSize(0.035)
         self.extra_logo.SetTextFont(52)
 
+    def __set_canvas(self, cvs_type="default", logy=False, grid=False):
         if cvs_type == "default":
             self.cvs = TCanvas("cvs", "", 500, 500)
-            self.cvs.SetGrid(1)
-            self.legend = TLegend(0.69, 0.65, 0.90, 0.90)
+            if grid:
+                self.cvs.SetGrid()
             if logy:
                 self.cvs.SetLogy()
-
         elif cvs_type == "ratio":
             self.cvs = TCanvas("cvs", "", 504, 560)
             self.pad_up = TPad("pad_up", "", 0, 0.25, 1, 1)
             self.pad_up.SetBottomMargin(0.02)
-            self.pad_up.SetGrid(1)
+            if grid:
+                self.pad_up.SetGrid()
             if logy:
                 self.pad_up.SetLogy()
 
@@ -61,144 +74,77 @@ class plotterBase:
             self.pad_down.SetGrid(1)
             self.pad_down.SetTopMargin(0.08)
             self.pad_down.SetBottomMargin(0.3)
-            
-			# leg size
-            if leg_size == "small":
-                self.legend = TLegend(0.69, 0.70, 0.90, 0.90)
-            elif leg_size == "medium":
-                self.legend = TLegend(0.69, 0.60, 0.90, 0.90)
-            elif leg_size == "large":
-                self.legend = TLegend(0.50, 0.60, 0.90, 0.90)
-            else:
-                print("wrong legend size...modify leg_size")
-                raise(RuntimeError)
-
         else:
-            raise(NameError)
+            print("WARNING: No matched canvas type %s", cvs_type)
+            print("Set the canvas type as default")
+            self.__set_canvas(self, cvs_type="default", logy=logy)
 
+    def __set_legend(self, leg_size="medium"):
+        if leg_size == "small":
+            self.legend = TLegend(0.69, 0.70, 0.90, 0.90)
+        elif leg_size == "medium":
+            self.legend = TLegend(0.69, 0.60, 0.90, 0.90)
+        elif leg_size == "large":
+            self.legend = TLegend(0.50, 0.60, 0.90, 0.90)
+        else:
+            print("wrong legend size...modify leg_size")
+            #print("Set the legend size as medium")
+            #self.__legend(self, leg_size="medium")
+
+    # methods
     def save(self, path):
         self.cvs.SaveAs(path)
 
+# HOWTO
+### dist = KinematicDistribution()
+# dist
 
-class kDistributions(plotterBase):
-    def __init__(self, leg_size="medium", logy=False):
-        super().__init__("ratio", leg_size, logy)
-        self.logy = logy
+
+class KinematicDistribution(plotterBase):
+    def __init__(self, cvs_params={}):
+        leg_size = cvs_params["leg_size"]
+        logy = cvs_params["logy"]
+        grid = cvs_params["grid"]
+        super().__init__(cvs_type="ratio", leg_size=leg_size, logy=logy, grid=grid)
+
+    def get_hists(self, hists={}, hist_params={}):
+        base_hist = hist_params["base_hist"]
+        rebin = hist_params["rebin"]
+
         self.hists = {}
-        self.ratio_hists = {}
+        self.ratio = {}
 
-    def get_hists(self, hists={}, scale="none", rebin=-1, x_axis_range=[0., -1.], y_axis_range=[0., -1.]):
+        print("INFO: Scale of histograms are normalizaed automatically")
+
+        # store histograms first
         for name, hist in hists.items():
-            h = hist.Clone("temp_" + name)
-            self.hists[name] = h
-
-        for name, hist in self.hists.items():
-            if scale == "none":
-                pass
-            elif scale == "normalize":
-                s = hist.Integral()
-                if s != 0:
-                    hist.Scale(1. / s)
-                else:
-                    print("total integral is 0... normalization will not work")
-            else:
-                raise(SyntaxError)
-
+            scale = hist.Integral()
+            hist.Scale(1./scale)
             if rebin == -1:
                 pass
             else:
                 hist.Rebin(rebin)
-        
-        y_range_max = self.automatic_y_range()
-        for name, hist in self.hists.items():
-            if x_axis_range[1] == -1.:
-                pass
-            else:
-                hist.GetXaxis().SetRangeUser(x_axis_range[0], x_axis_range[1])
+            self.hists[name] = hist
 
-            if y_axis_range[1] == -1.:
-                if self.logy:
-                    hist.GetYaxis().SetRangeUser(1, y_range_max*10)
-                else:
-                    hist.GetYaxis().SetRangeUser(0, y_range_max*1.2)
-            else:
-                hist.GetYaxis().SetRangeUser(y_axis_range[0], y_axis_range[1])
-
-    def automatic_y_range(self):
-        out = -1.
-        for name, hist in self.hists.items():
-            this_max = hist.GetMaximum()
-            if out < this_max:
-                out = this_max
-        return out
-        
-    def generate_ratio(self, base_name):
+        # now make ratio plots
         for name, hist in self.hists.items():
             ratio = hist.Clone("ratio_" + name)
-            ratio.Divide(self.hists[base_name])
-            self.ratio_hists[name] = ratio
+            if base_hist is None:
+                print("INFO: No base histogram is set")
+                ratio.Divide(self.hists[name])
+            else:
+                ratio.Divide(self.hists[base_hist])
+            self.ratio[name] = ratio
 
-    def deco_hists(self, deco_type="central", scale_factor=1., y_title=""):
-        # deco type: syst, central
-        if deco_type == "central":
-            color = 2
+        # now decorate the plots
+        self.__decorate_hists(hist_params)
+        self.__decorate_ratio(hist_params)
 
-            for name, hist in self.hists.items():
-                hist.SetStats(0)
+    def combine(self, info_params):
+        info = info_params["info"]
+        cmsText = info_params["cms_text"]
+        extraText = info_params["extra_text"]
 
-            # decorate
-            for name, hist in self.hists.items():
-                hist.SetLineColor(color)
-                hist.SetLineWidth(2)
-                color += 1
-
-                # x axis
-                hist.GetXaxis().SetLabelSize(0)
-
-                # y axis
-                hist.GetYaxis().SetTitle(y_title)
-                hist.GetYaxis().SetTitleSize(0.05)
-                hist.GetYaxis().SetTitleOffset(0.8)
-                hist.GetYaxis().SetTitleSize(0.05)
-                hist.GetYaxis().SetLabelSize(0.03)
-
-                super().legend().AddEntry(hist, name, "lep")
-
-    def deco_ratio(self, deco_type="central", error_range="medium", x_title="", y_title=""):
-        if deco_type == "central":
-            color = 2
-
-            for name, ratio in self.ratio_hists.items():
-                ratio.SetStats(0)
-                ratio.SetLineColor(color)
-                ratio.SetTitleSize(0.)
-                ratio.SetTitle("")
-                color += 1
-
-                if error_range == "small":
-                    ratio.GetYaxis().SetRangeUser(0.8, 1.2)
-                elif error_range == "medium":
-                    ratio.GetYaxis().SetRangeUser(0.5, 1.5)
-                elif error_range == "large":
-                    ratio.GetYaxis().SetRangeUser(0., 2.0)
-                else:
-                    raise(SyntaxError)
-
-                # Xaxis
-                ratio.GetXaxis().SetTitle(x_title)
-                ratio.GetXaxis().SetTitleSize(0.1)
-                ratio.GetXaxis().SetTitleOffset(1.)
-                ratio.GetXaxis().SetLabelSize(0.08)
-                ratio.GetXaxis().SetLabelOffset(0.02)
-
-                # Yaxis
-                ratio.GetYaxis().SetTitle(y_title)
-                ratio.GetYaxis().SetTitleSize(0.09)
-                ratio.GetYaxis().SetTitleOffset(0.5)
-                ratio.GetYaxis().SetLabelSize(0.08)
-                # ratio.GetXaxis().SetLable
-
-    def combine(self, info="#it{L}_{int} = 35.9 fb^{-1}", cmsText="CMS", extraText="Preliminary"):
         super().pad_up().cd()
         for name, hist in self.hists.items():
             hist.Draw("same")
@@ -208,8 +154,8 @@ class kDistributions(plotterBase):
         super().extra_logo().DrawLatexNDC(0.15, 0.78, extraText)
 
         super().pad_down().cd()
-        for name, hist in self.ratio_hists.items():
-            hist.Draw("same")
+        for name, ratio in self.ratio.items():
+            ratio.Draw("same")
 
         super().cvs().cd()
         super().pad_up().Draw()
@@ -218,16 +164,65 @@ class kDistributions(plotterBase):
     def draw(self):
         super().cvs().Draw()
 
-# TO DO: make templates
+    # private methods
+    def __decorate_hists(self, hist_params):
+        y_title = hist_params["y_title"]
+        __color = 2
 
+        # get y axis scale
+        y_range = -1.
+        for name, hist in self.hists.items():
+            this_max = hist.GetMaximum()
+            if y_range < this_max:
+                y_range = this_max
 
-class DataAndMC(plotterBase):
-    pass
+        for name, hist in self.hists.items():
+            hist.SetStats(0)
 
+            # line color
+            hist.SetLineColor(__color)
+            hist.SetLineWidth(2)
+            __color += 1
 
-class Efficiency(plotterBase):
-    pass
+            # x axis
+            hist.GetXaxis().SetLabelSize(0)
 
+            # y axis
+            hist.GetYaxis().SetTitle(y_title)
+            hist.GetYaxis().SetTitleSize(0.05)
+            hist.GetYaxis().SetTitleOffset(0.8)
+            hist.GetYaxis().SetTitleSize(0.05)
+            hist.GetYaxis().SetLabelSize(0.03)
+            if self.logy:
+                hist.GetYaxis().SetRangeUser(1., y_range*10.)
+            else:
+                hist.GetYaxis().SetRangeUser(0., y_range*1.3)
 
-class ROC(plotterBase):
-    pass
+            super().legend().AddEntry(hist, name, "lep")
+
+    def __decorate_ratio(self, hist_params):
+        error_range = hist_params["error_range"]
+        x_title = hist_params["x_title"]
+        ratio_title = hist_params["ratio_title"]
+        __color = 2
+
+        for name, ratio in self.ratio.items():
+            ratio.SetStats(0)
+            ratio.SetLineColor(__color)
+            ratio.SetTitleSize(0.)
+            ratio.SetTitle("")
+            __color += 1
+
+            # x axis
+            ratio.GetXaxis().SetTitle(x_title)
+            ratio.GetXaxis().SetTitleSize(0.1)
+            ratio.GetXaxis().SetTitleOffset(1.)
+            ratio.GetXaxis().SetLabelSize(0.08)
+            ratio.GetXaxis().SetLabelOffset(0.02)
+
+            # y axis
+            ratio.GetYaxis().SetRangeUser(error_range[0], error_range[1])
+            ratio.GetYaxis().SetTitle(ratio_title)
+            ratio.GetYaxis().SetTitleSize(0.09)
+            ratio.GetYaxis().SetTitleOffset(0.5)
+            ratio.GetYaxis().SetLabelSize(0.08)
