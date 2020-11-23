@@ -1,4 +1,4 @@
-from plotterBase import plotterBase, KinematicDistribution
+from plotterBase import KinematicDistribution
 from ROOT import *
 import userinputs
 import subprocess
@@ -60,5 +60,5 @@ for hist_name in hist_names:
     info_params = info["info_params"]
     make_hist(cvs_params, hist_params, info_params)
 
-for root_file in root_files:
-    root_file.Close()
+for name in file_names:
+    root_files[name].Close()

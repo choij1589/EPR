@@ -1,4 +1,4 @@
-from ROOT import TCanvas, TLegend, TPad, TLatex
+from ROOT import TCanvas, TLegend, TPad, THStack, TLatex, TColor
 
 
 class plotterBase:
@@ -92,15 +92,156 @@ class plotterBase:
             #self.__legend(self, leg_size="medium")
 
     # methods
+    def draw(self):
+        self.cvs.Draw()
+
     def save(self, path):
         self.cvs.SaveAs(path)
         self.cvs.Close()
 
-# HOWTO
-### dist = KinematicDistribution()
-# dist
+# Comparing binned-samples and inclusive samples
 
 
+class CompareBinnedAndIncl(plotterBase):
+    def __init__(self, cvs_params):
+        leg_size = cvs_params["leg_size"]
+        logy = cvs_params["logy"]
+        grid = cvs_params["grid"]
+        super().__init__(cvs_type="ratio", leg_size=leg_size, logy=logy, grid=grid)
+
+    def get_hists(self, hist_incl, hists_binned, hist_params):
+        rebin = hist_params["rebin"]
+        self.hist_incl = None
+        self.hists_binned = {}
+        self.stack = THStack("stack", "")
+        self.syst = None
+        self.ratio = None
+        self.ratio_syst = None
+
+        # Store histograms
+        print("INFO: Storing histograms...")
+        print("INFO: histograms automatically normalized to L = 150 fb^-1")
+        self.hist_incl = self.__rebin(hist_incl, hist_params)
+        for name, hist in hists_binned.items():
+            self.hists_binned[name] = self.__rebin(hist, hist_params)
+
+        self.__decorate_hists(hist_params)
+        self.__make_stack_and_syst()
+        self.__make_ratio(hist_params)
+
+    def combine(self, info_params):
+        info = info_params["info"]
+        cmsText = info_params["cms_text"]
+        extraText = info_params["extra_text"]
+
+        super().pad_up().cd()
+        self.hist_incl.Draw("p&hist")
+        self.stack.Draw("hist & pfc")
+        self.syst.Draw("e2 & f & same")
+        self.hist_incl.Draw("p&hist&same")
+        self.hist_incl.Draw("e1 & same")
+
+        super().legend().Draw()
+        super().info().DrawLatexNDC(0.72, 0.91, info)
+        super().logo().DrawLatexNDC(0.15, 0.83, cmsText)
+        super().extra_logo().DrawLatexNDC(0.15, 0.78, extraText)
+
+        super().pad_down().cd()
+        self.ratio.Draw("p & hist")
+        self.ratio_syst.Draw("e2&f&same")
+
+        super().cvs().cd()
+        super().pad_up().Draw()
+        super().pad_down().Draw()
+
+    def __rebin(self, hist, hist_params):
+        rebin = hist_params["rebin"]
+        if rebin == -1:
+            pass
+        else:
+            hist.Rebin(rebin)
+        if "x_range" in hist_params.keys():
+            x_range = hist_params["x_range"]
+            hist.GetXaxis().SetRangeUser(x_range[0], x_range[1])
+        return hist
+
+    def __decorate_hists(self, hist_params):
+        y_title = hist_params["y_title"]
+
+        # y axis scale is just the Maximum of inclusive sample
+        print("INFO: y axis range set to be maximum of inclusive plot...")
+        y_range = self.hist_incl.GetMaximum()
+
+        # decorate self.hist_incl
+        self.hist_incl.SetStats(0)
+        self.hist_incl.SetMarkerStyle(8)
+        self.hist_incl.SetMarkerSize(0.5)
+        self.hist_incl.SetMarkerColor(12)
+
+        # X axis
+        self.hist_incl.GetXaxis().SetLabelSize(0)
+
+        # Y axis
+        self.hist_incl.GetYaxis().SetTitle(y_title)
+        self.hist_incl.GetYaxis().SetRangeUser(0., y_range*1.3)
+        if self.logy:
+            self.hist_incl.GetYaxis().SetRangeUser(1., y_range*10.)
+        
+        for name, hist in self.hists_binned.items():
+            hist.GetXaxis().SetLabelSize(0)
+
+        # add to legend
+        super().legend().AddEntry(self.hist_incl, "Incl", "lep")
+
+    def __make_stack_and_syst(self):
+        print("WARNING: Make sure that histograms are properly scaled")
+        for name, hist in self.hists_binned.items():
+            hist.GetXaxis().SetLabelSize(0)
+            self.stack.Add(hist)
+            super().legend().AddEntry(hist, name, "f")
+
+            if self.syst == None:
+                self.syst = hist.Clone("syst")
+            else:
+                self.syst.Add(hist)
+        
+        self.stack.Draw()
+        self.stack.GetHistogram().GetXaxis().SetLabelSize(0) 
+        self.syst.SetStats(0)
+        self.syst.SetFillColorAlpha(12, 0.4)
+        self.syst.SetFillStyle(3144)
+        self.syst.GetXaxis().SetLabelSize(0)
+        super().legend().AddEntry(self.syst, "stat err", "f")
+
+    def __make_ratio(self, hist_params):
+        error_range = hist_params["error_range"]
+        x_title = hist_params["x_title"]
+
+        self.ratio = self.hist_incl.Clone("ratio")
+        self.ratio.Divide(self.syst)
+        self.ratio_syst = self.ratio.Clone("ratio_syst")
+
+        self.ratio.SetStats(0)
+        self.ratio.SetTitle("")
+        # y axis
+        self.ratio.GetYaxis().SetRangeUser(error_range[0], error_range[1])
+        self.ratio.GetYaxis().SetTitle("Incl / binned")
+        self.ratio.GetYaxis().SetTitleSize(0.08)
+        self.ratio.GetYaxis().SetTitleOffset(0.5)
+        self.ratio.GetYaxis().SetLabelSize(0.08)
+        # x axis
+        self.ratio.GetXaxis().SetTitle(x_title)
+        self.ratio.GetXaxis().SetTitleSize(0.1)
+        self.ratio.GetXaxis().SetTitleOffset(0.8)
+        self.ratio.GetXaxis().SetLabelSize(0.08)
+
+        self.ratio_syst.SetStats(0)
+        self.ratio_syst.SetFillColorAlpha(12, 0.4)
+        self.ratio_syst.SetFillStyle(3144)
+
+
+# Comparing normalized distributions b/w observables
+# e.g samples with different setup (e.g. years...)
 class KinematicDistribution(plotterBase):
     def __init__(self, cvs_params={}):
         leg_size = cvs_params["leg_size"]
@@ -152,7 +293,7 @@ class KinematicDistribution(plotterBase):
 
         super().pad_up().cd()
         for name, hist in self.hists.items():
-            hist.Draw("same")
+            hist.Draw("same&plc")
         super().legend().Draw()
         super().info().DrawLatexNDC(0.72, 0.91, info)
         super().logo().DrawLatexNDC(0.15, 0.83, cmsText)
@@ -160,7 +301,7 @@ class KinematicDistribution(plotterBase):
 
         super().pad_down().cd()
         for name, ratio in self.ratio.items():
-            ratio.Draw("same")
+            ratio.Draw("same&plc")
 
         super().cvs().cd()
         super().pad_up().Draw()
@@ -172,7 +313,6 @@ class KinematicDistribution(plotterBase):
     # private methods
     def __decorate_hists(self, hist_params):
         y_title = hist_params["y_title"]
-        __color = 2
 
         # get y axis scale
         y_range = -1.
@@ -185,9 +325,7 @@ class KinematicDistribution(plotterBase):
             hist.SetStats(0)
 
             # line color
-            hist.SetLineColor(__color)
             hist.SetLineWidth(2)
-            __color += 1
 
             # x axis
             hist.GetXaxis().SetLabelSize(0)
@@ -209,14 +347,11 @@ class KinematicDistribution(plotterBase):
         error_range = hist_params["error_range"]
         x_title = hist_params["x_title"]
         ratio_title = hist_params["ratio_title"]
-        __color = 2
 
         for name, ratio in self.ratio.items():
             ratio.SetStats(0)
-            ratio.SetLineColor(__color)
             ratio.SetTitleSize(0.)
             ratio.SetTitle("")
-            __color += 1
 
             # x axis
             ratio.GetXaxis().SetTitle(x_title)
