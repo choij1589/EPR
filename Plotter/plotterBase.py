@@ -94,6 +94,7 @@ class plotterBase:
     # methods
     def save(self, path):
         self.cvs.SaveAs(path)
+        self.cvs.Close()
 
 # HOWTO
 ### dist = KinematicDistribution()
@@ -124,6 +125,10 @@ class KinematicDistribution(plotterBase):
                 pass
             else:
                 hist.Rebin(rebin)
+
+            if "x_range" in hist_params.keys():
+                x_range = hist_params["x_range"]
+                hist.GetXaxis().SetRangeUser(x_range[0], x_range[1])
             self.hists[name] = hist
 
         # now make ratio plots
