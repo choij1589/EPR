@@ -1,14 +1,14 @@
-# file_names = ["DYm50_012j_nlo_cp5_GridToNano",
-#              "DYm50_0j_nlo_cp5_GridToNano",
-#              "DYm50_1j_nlo_cp5_GridToNano",
-#              "DYm50_2j_nlo_cp5_GridToNano"]
+# file_names = ["DYm50_012j_nlo_cp5_MiniToNano",
+#              "DYm50_0j_nlo_cp5_MiniToNano",
+#              "DYm50_1j_nlo_cp5_MiniToNano",
+#              "DYm50_2j_nlo_cp5_MiniToNano"]
 # selectorArgs = ["", "_lhe", "_born", "_barelep", "_prefsr"]
-file_names = ["DYm50_012j_nlo_cp5_GridToNano", "DYm50_cp5_MiniToNano"]
+file_names = ["DYm50_012j_nlo_cp5_GridToNano", "DYm50_012j_nlo_cp5_MiniToNano"]
 selectorArgs = ["", "_barelep", "_prefsr"]
 observables = ["ZMass", "yZ", "ptZ", "phiZ", 
                 "ptl1", "ptl2", "etal1", "etal2", "phil1", "phil2", "nLeptons",
                 "ptj1", "ptj2", "etaj1", "etaj2", "phij1", "phij2", "nJets"]
-output_path = "Test/Kinematics"
+output_path = "/home/choij/workspace/EPR/PlotterResult/drellyan/cp5/Kinematics/GridVsMini"
 params = {
 	# Z
     "ZMass": {
@@ -18,11 +18,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
              "rebin": 20,
             "x_title": "M(ll)",
             "y_title": "A.U.",
-            "ratio_title": "x/Default",
+            "ratio_title": "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5]
         },
         "info_params": {
@@ -39,11 +39,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "y^{Z}",
             "y_title": "A.U.", 
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -59,11 +59,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": 2,
             "x_title": "p_{T}(Z)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "x_range": [0., 200.],
             "error_range": [0.5, 1.5],
         },
@@ -80,11 +80,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#phi(Z)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -101,11 +101,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": 2,
             "x_title": "p_{T}(l1)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
 			"x_range" : [0., 200.],
             "error_range": [0.5, 1.5],
         },
@@ -122,11 +122,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": 2,
             "x_title": "p_{T}(l2)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
 			"x_range" : [0., 200.],
             "error_range": [0.5, 1.5],
         },
@@ -143,11 +143,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#eta(l1)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -163,11 +163,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#eta(l2)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -183,11 +183,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#phi(l1)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -203,11 +203,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#phi(l2)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -223,11 +223,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "N(l)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -244,11 +244,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "p_{T}(j1)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "x_range" : [0., 200.],
             "error_range": [0.5, 1.5],
         },
@@ -265,11 +265,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "p_{T}(j2)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "x_range" : [0., 200.],
             "error_range": [0.5, 1.5],
         },
@@ -286,11 +286,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#eta(j1)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -306,11 +306,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#eta(j2)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -326,11 +326,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#phi(j1)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -346,11 +346,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "#phi(j2)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {
@@ -366,11 +366,11 @@ params = {
             "grid": True
         },
         "hist_params": {
-            "base_hist": "DYm50_012j_nlo_cp5_GridToNano_dressedLep",
+            "base_hist": "DYm50_012j_nlo_cp5_MiniToNano_dressedLep",
             "rebin": -1,
             "x_title": "N(j)",
             "y_title": "A.U.",
-            "ratio_title" : "x/Default",
+            "ratio_title" : "x/MiniToNano_dressedLep",
             "error_range": [0.5, 1.5],
         },
         "info_params": {

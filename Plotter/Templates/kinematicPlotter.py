@@ -22,7 +22,7 @@ def make_hist(cvs_params, hist_params, info_params):
     canvas = Kinematics(cvs_params)
     canvas.get_hists(hists, hist_params)
     canvas.combine(info_params)
-    path_to_store = plotterBaseDir + output_path + "/" + hist_name + ".pdf"
+    path_to_store = output_path + "/" + hist_name + ".pdf"
     canvas.save(path_to_store)
 
 
@@ -36,6 +36,8 @@ for hist_name in hist_names:
     for file_name in file_names:
         if file_name == "DYm50_012j_nlo_cp5_GridToNano":
             dir_name = "DYm50_cp5_GridToNano"
+        elif file_name == "DYm50_012j_nlo_cp5_MiniToNano":
+            dir_name = "DYm50_cp5_MiniToNano"
         else:
             dir_name = file_name
 
@@ -55,6 +57,7 @@ for hist_name in hist_names:
                 pass
             
             key = file_name + option
+            print(key)
             hists[key] = hist
     
     info = userinputs.params[hist_name]
