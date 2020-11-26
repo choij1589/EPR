@@ -17,6 +17,7 @@ file_names = userinputs.file_names
 selectorArgs = userinputs.selectorArgs
 hist_names = userinputs.observables
 output_path = userinputs.output_path
+base_hist = userinputs.base_hist
 
 def make_hist(cvs_params, hist_params, info_params):
     canvas = Kinematics(cvs_params)
@@ -44,23 +45,24 @@ for hist_name in hist_names:
         # combine ee and mm channel
         for option in selectorArgs:
             hist_path = dir_name + "/" + hist_name
+            print(hist_path + option + "_ee")
             hist_ee = root_files[file_name].Get(hist_path + option + "_ee")
             hist_mm = root_files[file_name].Get(hist_path + option + "_mm")
             hist = hist_ee.Clone(file_name + option + "_clone")
             hist.Add(hist_mm)
 
             if option == "":
+                key = file_name + "_dressedLep"
                 option = "_dressedLep"
             elif option == "_prefsr":
-                option = "_matchedGenJet"
+                key = file_name + "_matchedGenJet"
             else:
-                pass
-            
-            key = file_name + option
+                key = file_name + option
             print(key)
             hists[key] = hist
     
     info = userinputs.params[hist_name]
+    info["hist_params"]["base_hist"] = base_hist
     cvs_params = info["cvs_params"]
     hist_params = info["hist_params"]
     info_params = info["info_params"]
