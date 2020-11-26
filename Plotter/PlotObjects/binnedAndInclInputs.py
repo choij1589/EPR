@@ -2,7 +2,7 @@ file_names = ["DYm50_012j_nlo_cp5_GridToNano",
               "DYm50_0j_nlo_cp5_GridToNano",
               "DYm50_1j_nlo_cp5_GridToNano",
               "DYm50_2j_nlo_cp5_GridToNano"]
-option = "_lhe"
+option = "_prefsr"
 observables = ["ZMass", "yZ", "ptZ", "phiZ", 
                 "ptl1", "ptl2", "etal1", "etal2", "phil1", "phil2", "nLeptons",
                 "ptj1", "ptj2", "etaj1", "etaj2", "phij1", "phij2", "nJets"]
@@ -13,7 +13,7 @@ weights = {
         "DYm50_1j_nlo_cp5_GridToNano" : 8.66583897E-04,
         "DYm50_2j_nlo_cp5_GridToNano" : 9.94959157E-04
 }
-output_path = "/home/choij/workspace/EPR/PlotterResult/drellyan/cp5/BinnedAndIncl/lhe"
+output_path = "/home/choij/workspace/EPR/PlotterResult/drellyan/cp5/BinnedAndIncl/matchedGenJet"
 params = {
 	# Z
     "ZMass": {
