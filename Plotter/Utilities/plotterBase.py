@@ -291,7 +291,8 @@ class Kinematics(plotterBase):
 
         super().pad_up().cd()
         for name, hist in self.hists.items():
-            hist.Draw("same&plc")
+            # hist.Draw("same&plc")
+            hist.Draw("same")
         super().legend().Draw()
         super().info().DrawLatexNDC(0.72, 0.91, info)
         super().logo().DrawLatexNDC(0.15, 0.83, cmsText)
@@ -299,7 +300,9 @@ class Kinematics(plotterBase):
 
         super().pad_down().cd()
         for name, ratio in self.ratio.items():
-            ratio.Draw("same&plc")
+            # ratio.Draw("same&plc")
+            ratio.Draw("same")
+
 
         super().cvs().cd()
         super().pad_up().Draw()
@@ -319,11 +322,14 @@ class Kinematics(plotterBase):
             if y_range < this_max:
                 y_range = this_max
 
+        _color = 3
         for name, hist in self.hists.items():
             hist.SetStats(0)
 
             # line color
+            hist.SetLineColor(_color)
             hist.SetLineWidth(2)
+            _color += 1
 
             # x axis
             hist.GetXaxis().SetLabelSize(0)
