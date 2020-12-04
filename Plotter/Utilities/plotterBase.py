@@ -259,7 +259,7 @@ class Kinematics(plotterBase):
         # store histograms first
         for name, hist in hists.items():
             scale = hist.Integral()
-            hist.Scale(1./scale)
+            #hist.Scale(1./scale)
             if rebin == -1:
                 pass
             else:

@@ -4,12 +4,12 @@
 #              "DYm50_2j_nlo_cp5_MiniToNano"]
 # selectorArgs = ["", "_lhe", "_born", "_barelep", "_prefsr"]
 file_names = ["DYm50_012j_nlo_cp5_GridToNano", "DYm50_012j_nlo_cp5_MiniToNano"]
-selectorArgs = ["_prefsr"]
+selectorArgs = [""]
 observables = ["ZMass", "yZ", "ptZ", "phiZ", 
                 "ptl1", "ptl2", "etal1", "etal2", "phil1", "phil2", "nLeptons",
                 "ptj1", "ptj2", "etaj1", "etaj2", "phij1", "phij2", "nJets"]
-output_path = "/Users/choij/workspace/EPR/PlotterResult/drellyan/cp5/Kinematics/matchedGenJet"
-base_hist = "DYm50_012j_nlo_cp5_MiniToNano_matchedGenJet"
+output_path = "/Users/choij/workspace/EPR/PlotterResult/drellyan/cp5/Kinematics/"
+base_hist = "DYm50_012j_nlo_cp5_MiniToNano_dressedLep"
 params = {
 	# Z
     "ZMass": {
