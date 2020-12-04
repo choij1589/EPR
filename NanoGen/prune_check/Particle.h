@@ -34,7 +34,7 @@ public:
 			const int &statusFlag) 
 		: Particle(pt, eta, phi, mass), 
 		__pdgid(pid), __motherIdx(motherIdx), __status(status), __statusFlag(statusFlag) {}
-    int Pdgid() const { return __pdgid; }
+    int PdgId() const { return __pdgid; }
 	int MotherIdx() const { return __motherIdx; }
 	int Status() const { return __status; }
 	int StatusFlag() const { return __statusFlag; }
