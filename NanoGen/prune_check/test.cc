@@ -2,9 +2,9 @@
 using namespace std;
 
 void test() {
-	TFile f = TFile("DYm50_nlo_cp5_MiniToNano_UL.root");
+	TFile* f = new TFile("DYm50_nlo_cp5_MiniToNano_UL.root");
 	// Set branch address	
-	auto tr = (TTree*)f.Get("Events");
+	auto tr = (TTree*)f->Get("Events");
 	unsigned int nEntry = tr->GetEntries();
 	unsigned int nGenPart; tr->SetBranchAddress("nGenPart", &nGenPart);
 	float GenPart_pt[28]; tr->SetBranchAddress("GenPart_pt", &GenPart_pt);
@@ -37,5 +37,5 @@ void test() {
 		}
 	}
 
-	f.Close();
+	f->Close();
 }
