@@ -1,19 +1,22 @@
-file_names = ["DYm50_012j_nlo_cp5_GridToNano",
-              "DYm50_0j_nlo_cp5_GridToNano",
-              "DYm50_1j_nlo_cp5_GridToNano",
-              "DYm50_2j_nlo_cp5_GridToNano"]
-option = "_prefsr"
+file_names = ["DYm50_012j_nlo_cp5", "DYm50_0j_nlo_cp5", "DYm50_1j_nlo_cp5", "DYm50_2j_nlo_cp5"]
+#file_names = ["DYm50_012j_nlo_cuep5m1", "DYm50_0j_nlo_cuep5m1", "DYm50_1j_nlo_cuep5m1", "DYm50_2j_nlo_cuep5m1"]
+option = "_barelep"
 observables = ["ZMass", "yZ", "ptZ", "phiZ", 
                 "ptl1", "ptl2", "etal1", "etal2", "phil1", "phil2", "nLeptons",
                 "ptj1", "ptj2", "etaj1", "etaj2", "phij1", "phij2", "nJets"]
 lumi = 150. # fb^-1
 weights = {
-        "DYm50_012j_nlo_cp5_GridToNano" : 3.47162670E-03,
-        "DYm50_0j_nlo_cp5_GridToNano" : 8.99246544E-04,
-        "DYm50_1j_nlo_cp5_GridToNano" : 8.66583897E-04,
-        "DYm50_2j_nlo_cp5_GridToNano" : 9.94959157E-04
+        "DYm50_012j_nlo_cp5" : 2.99030301E-03,
+        "DYm50_0j_nlo_cp5" : 8.43901018E-04,
+        "DYm50_1j_nlo_cp5" : 7.35992842E-04,
+        "DYm50_2j_nlo_cp5" : 4.39098262E-04,
+        "DYm50_012j_nlo_cuep5m1" : 2.73003549E-03,
+        "DYm50_0j_nlo_cuep5m1" : 9.57783732E-04,
+        "DYm50_1j_nlo_cuep5m1" : 7.61277377E-04,
+        "DYm50_2j_nlo_cuep5m1" : 3.93164481E-04
 }
-output_path = "/home/choij/workspace/EPR/PlotterResult/drellyan/cp5/BinnedAndIncl/matchedGenJet"
+#output_path = "/home/choij/Workspace/EPR/PlotterResult/drellyan/cp5/BinnedAndIncl/matchedGenJet"
+output_path = "/home/choij/Workspace/www/VGenStudies"
 params = {
 	# Z
     "ZMass": {

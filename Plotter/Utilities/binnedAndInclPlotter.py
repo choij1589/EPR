@@ -27,11 +27,18 @@ def make_hist():
     canvas = BinnedAndIncl(cvs_params)
     canvas.get_hists(hist_incl, hists_binned, hist_params)
     canvas.combine(info_params)
-    canvas.save(output_path + "/" + hist_name + ".pdf")
+    #if option == "_prefsr":
+    #    suffix = "_matchedGenJet"
+    #elif option == "":
+    #    suffix = "_dressedLep"
+    #else:
+    #    suffix = option
+    canvas.save(output_path + "/" + file_name + "_" + hist_name + ".png")
 
 root_files = {}
 for name in file_names:
     this_path = selectorOutput + name + ".root"
+    print(this_path)
     root_files[name] = TFile(this_path)
 
 for hist_name in hist_names:
@@ -43,8 +50,14 @@ for hist_name in hist_names:
     hist_incl = None
     hists_binned = {}
     for file_name in file_names:
-        if file_name == "DYm50_012j_nlo_cp5_GridToNano":
+        if file_name == "DYm50_012j_nlo_cp5":
             dir_name = "DYm50_cp5_GridToNano"
+        elif file_name == "DYm50_0j_nlo_cp5":
+            dir_name = "DYm50_0j_nlo_cp5_GridToNano"
+        elif file_name == "DYm50_1j_nlo_cp5":
+            dir_name = "DYm50_1j_nlo_cp5_GridToNano"
+        elif file_name == "DYm50_2j_nlo_cp5":
+            dir_name = "DYm50_2j_nlo_cp5_GridToNano"
         else:
             dir_name = file_name
         
@@ -61,7 +74,7 @@ for hist_name in hist_names:
         if option == "":
             file_name += "_dressedLep"
         elif option == "_prefsr":
-            file_name += "_prefsr"
+            file_name += "_matchedGenJet"
         else:
             file_name += option
 
